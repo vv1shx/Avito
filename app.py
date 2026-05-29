@@ -1,9 +1,22 @@
-from flask import Flask, request, jsonify
+import os  # Добавляем стандартный модуль для работы с путями Windows
+from flask import Flask, request, jsonify, render_template
 from database import db
 from models import User, Advertisement, Cart, Chat, Message
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/avito_clone.db'
+
+# 1. Вычисляем полный (абсолютный) путь к папке твоего проекта Avito
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# 2. Формируем путь к папке instance и создаем её, если её ещё нет на диске
+instance_path = os.path.join(basedir, 'instance')
+if not os.path.exists(instance_path):
+    os.makedirs(instance_path)
+
+# 3. Собираем правильный путь к самой базе данных
+# Для Windows получится идеальный путь вида: sqlite:///C:\Users\Nikita!\...\instance\avito_clone.db
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(instance_path, 'avito_clone.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Привязываем базу к приложению
@@ -27,19 +40,21 @@ def create_ad():
     )
     db.session.add(new_ad)
     db.session.commit()
+    
     return jsonify({"message": "Created", "id": new_ad.id}), 201
 
 @app.route('/ads', methods=['GET'])
 def get_ads():
-    ads = Advertisement.query.all()
-    return jsonify([{
-        "id": a.id, 
-        "title": a.title, 
-        "price": a.price, 
-        "author_id": a.user_id,
-        "photo": a.photo
-    } for a in ads])
-
+    #ads = Advertisement.query.all()
+    #return jsonify([{
+    #    "id": a.id, 
+    #    "title": a.title, 
+    #    "price": a.price, 
+    #    "author_id": a.user_id,
+    #    "photo": a.photo
+    #} for a in ads])
+    return render_template("add_ad.html")
+    
 @app.route('/ads/<int:id>', methods=['GET'])
 def get_one_ad(id):
     ad = Advertisement.query.get_or_404(id)
