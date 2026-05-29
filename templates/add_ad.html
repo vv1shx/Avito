@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание объявления</title>
+    
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Создать объявление</h1>
+        <form action="http://127.0.0.1:5000/ads" method="post">
+            <div class="form-group">
+                <label for="user_id">User_id:</label>
+                <input type="number" id="user_id" name="user_id" placeholder="666" required>
+            </div>
+            <div class="form-group">
+                <label for="title">Название объявления:</label>
+                <input type="text" id="title" name="title" placeholder="Например, Продам гараж" required>
+            </div>
+
+            <div class="form-group">
+                <label for="body">Описание:</label>
+                <textarea id="body" name="body" rows="5" placeholder="Опишите ваш товар..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Цена:</label>
+                <input type="number" id="price" name="price" placeholder="₽" required>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Ссылка на фото:</label>
+                <input type="url" id="photo" name="photo" placeholder="https://example.com/image.jpg" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Опубликовать</button>
+        </form>
+    </div>
+</body>
+</html>
