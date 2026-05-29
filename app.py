@@ -38,10 +38,19 @@ def create_ad():
         user_id=data['user_id'],
         photo=data['photo']
     )
-    db.session.add(new_ad)
-    db.session.commit()
+    try:
+        db.session.add(new_ad) # Добавляем запись в сессию
+        db.session.commit()    # Фиксируем изменения в файле БД
+            
+        
+        
+        return render_template("add_ad.html")
+            
+    except Exception as e:
+        db.session.rollback() # Если произошла ошибка, откатываем изменения
+        return f"Произошла ошибка при сохранении: {e}", 500
     
-    return jsonify({"message": "Created", "id": new_ad.id}), 201
+    #return jsonify({"message": "Created", "id": new_ad.id}), 201
 
 @app.route('/ads', methods=['GET'])
 def get_ads():
